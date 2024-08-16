@@ -7,8 +7,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 import static utils.Constants.PlayerConstants.*;
 import static utils.Constants.PlayerConstants.Directions.*;
@@ -111,13 +110,15 @@ public class GamePanel extends JPanel {
     }
   }
 
+  public void updateGame() {
+    updateAnimationTick();
+    setAnimation();
+    updatePosition();
+  }
+
 
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
-    updateAnimationTick();
-
-    setAnimation();
-    updatePosition();
 
     g.drawImage(animations[playerAction][animationIndex], (int) xDelta, (int) yDelta, 256, 160, null);
   }

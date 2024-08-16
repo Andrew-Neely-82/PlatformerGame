@@ -13,15 +13,28 @@ import java.io.InputStream;
 public class GamePanel extends JPanel {
   private MouseInputs mouseInputs;
   private float xDelta = 100, yDelta = 100;
-  private BufferedImage img, subImg;
+  private BufferedImage img;
+  private BufferedImage[] idleAnimation;
+  private byte animationTick, animationIndex, animationSpeed = 15;
 
   public GamePanel() {
     mouseInputs = new MouseInputs(this);
+
     importImg();
+    loadAnimations();
+
     setPanelSize();
     addKeyListener(new KeyboardInputs(this));
     addMouseListener(mouseInputs);
     addMouseMotionListener(mouseInputs);
+  }
+
+  private void loadAnimations() {
+    idleAnimation = new BufferedImage[5];
+
+    for (int i = 0; i < idleAnimation.length; i++) {
+      idleAnimation[i] = img.getSubimage(i * 64, 0, 64, 40);
+    }
   }
 
   private void importImg() {
@@ -49,10 +62,24 @@ public class GamePanel extends JPanel {
     this.yDelta += value;
   }
 
+  private void updateAnimationTick() {
+    animationTick++;
+    if (animationTick >= animationSpeed) {
+      animationTick = 0;
+      animationIndex++;
+      if (animationIndex >= idleAnimation.length) {
+        animationIndex = 0;
+      }
+    }
+  }
+
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
 
-    subImg = img.getSubimage(1 * 64, 8 * 40, 64, 40);
-    g.drawImage(subImg, (int) xDelta, (int) yDelta, 128, 80, null);
+    updateAnimationTick();
+
+    g.drawImage(idleAnimation[animationIndex], (int) xDelta, (int) yDelta, 128, 80, null);
   }
+
+
 }

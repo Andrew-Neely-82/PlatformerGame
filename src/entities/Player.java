@@ -13,7 +13,7 @@ public class Player extends Entity {
   private BufferedImage[][] animations;
   private byte animationTick, animationIndex, animationSpeed = 15;
   private int playerAction = IDLE;
-  private boolean moving = false;
+  private boolean moving, attacking = false;
   private boolean left, right, up, down;
   private float playerSpeed = 2.0f;
 
@@ -41,17 +41,31 @@ public class Player extends Entity {
       animationIndex++;
       if (animationIndex >= GetSpriteAmount(playerAction)) {
         animationIndex = 0;
+        attacking = false;
       }
     }
 
   }
 
   private void setAnimation() {
+    int startAnimation = playerAction;
+
     if (moving) {
       playerAction = RUNNING;
     } else {
       playerAction = IDLE;
     }
+
+    if (attacking)
+      playerAction = ATTACK_1;
+
+    if (startAnimation != playerAction)
+      resetAnimationTick();
+  }
+
+  private void resetAnimationTick() {
+    animationTick = 0;
+    animationIndex = 0;
   }
 
   private void updatePosition() {
@@ -95,6 +109,10 @@ public class Player extends Entity {
     right = false;
     up = false;
     down = false;
+  }
+
+  public void setAttacking(boolean attacking) {
+    this.attacking = attacking;
   }
 
   public boolean isLeft() {

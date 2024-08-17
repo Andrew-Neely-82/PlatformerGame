@@ -12,13 +12,11 @@ public class Game implements Runnable {
   private Thread gameThread;
   private final byte FPS_SET = 120;
   private final int UPS_SET = 200;
-
   private Playing playing;
   private Menu menu;
-
   /* ============================== SIZES ============================== */
   public final static byte TILES_DEFAULT_SIZE = 32;
-  public final static float SCALE = 2f;
+  public final static float SCALE = 2f; // MAX 2f
   public final static byte TILES_IN_WIDTH = 26;
   public final static byte TILES_IN_HEIGHT = 14;
   public final static int TILES_SIZE = (int) (TILES_DEFAULT_SIZE * SCALE);
@@ -51,7 +49,10 @@ public class Game implements Runnable {
       case PLAYING:
         playing.update();
         break;
+      case OPTIONS:
+      case QUIT:
       default:
+        System.exit(0);
         break;
     }
   }
@@ -67,43 +68,34 @@ public class Game implements Runnable {
       default:
         break;
     }
-
   }
 
   @Override
   public void run() {
-
     double timePerFrame = 1000000000.0 / FPS_SET;
     double timePerUpdate = 1000000000.0 / UPS_SET;
-
     long previousTime = System.nanoTime();
-
     int frames = 0;
     int updates = 0;
     long lastCheck = System.currentTimeMillis();
-
     double deltaUpdates = 0;
     double deltaFrames = 0;
 
     while (true) {
       long currentTime = System.nanoTime();
-
       deltaUpdates += (currentTime - previousTime) / timePerUpdate;
       deltaFrames += (currentTime - previousTime) / timePerFrame;
       previousTime = currentTime;
-
       if (deltaUpdates >= 1) {
         update();
         updates++;
         deltaUpdates--;
       }
-
       if (deltaFrames >= 1) {
         gamePanel.repaint();
         frames++;
         deltaFrames--;
       }
-
       if (System.currentTimeMillis() - lastCheck >= 1000) {
         lastCheck = System.currentTimeMillis();
         System.out.println("FPS " + frames + " | UPS " + updates);
@@ -111,7 +103,6 @@ public class Game implements Runnable {
         updates = 0;
       }
     }
-
   }
 
   public void windowFocusLost() {

@@ -11,6 +11,7 @@ public class PauseButton {
     this.y = y;
     this.width = width;
     this.height = height;
+    createBounds();
   }
 
   private void createBounds() {bounds = new Rectangle(x, y, width, height);}

@@ -47,6 +47,8 @@ public class Playing extends State implements Statemethods {
   @Override
   public void mouseReleased(MouseEvent e) {if (paused) pauseOverlay.mouseReleased(e);}
 
+  public void mouseDragged(MouseEvent e) {if (paused) pauseOverlay.mouseDragged(e);}
+
   @Override
   public void mouseMoved(MouseEvent e) {if (paused) pauseOverlay.mouseMoved(e);}
 
